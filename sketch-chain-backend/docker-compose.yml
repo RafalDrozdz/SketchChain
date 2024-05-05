@@ -3,11 +3,11 @@ version: '3.8'
 services:
   db:
     image: postgres
-    container_name: countdown-db
+    container_name: sketch-chain-db
     restart: always
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: countdown
+      POSTGRES_DB: sketch-chain
