@@ -6,6 +6,11 @@ import { TypeOrmModule, type TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from 'src/config/app.config';
 import configValidationSchema from 'src/config/app.config.validation';
+import { PlayerModule } from 'src/player/player.module';
+import { RoomModule } from 'src/room/room.module';
+import { StepModule } from 'src/step/step.module';
+import { DrawingModule } from 'src/drawing/drawing.module';
+import { GuessModule } from 'src/guess/guess.module';
 
 @Module({
   imports: [
@@ -20,6 +25,11 @@ import configValidationSchema from 'src/config/app.config.validation';
       inject: [ConfigService],
     }),
     AuthModule,
+    PlayerModule,
+    RoomModule,
+    StepModule,
+    DrawingModule,
+    GuessModule,
   ],
   controllers: [AppController],
   providers: [AppService],
