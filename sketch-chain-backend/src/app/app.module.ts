@@ -11,6 +11,7 @@ import { RoomModule } from 'src/room/room.module';
 import { StepModule } from 'src/step/step.module';
 import { DrawingModule } from 'src/drawing/drawing.module';
 import { GuessModule } from 'src/guess/guess.module';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { GuessModule } from 'src/guess/guess.module';
     StepModule,
     DrawingModule,
     GuessModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
