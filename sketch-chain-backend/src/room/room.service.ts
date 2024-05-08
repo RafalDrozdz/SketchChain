@@ -1,9 +1,8 @@
+import { Room } from './room.entity';
+import { Player } from 'src/player/player.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { CreateRoomDto } from './dto/create-room.dto';
-import { Room } from './room.entity';
-import { Player } from 'src/player/player.entity';
 import { RoomDto } from './dto/room.dto';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class RoomService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async create({ userNick: nick }: CreateRoomDto) {
+  async create(playerId: string) {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
