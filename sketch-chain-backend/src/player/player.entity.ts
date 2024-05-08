@@ -12,11 +12,11 @@ import {
 
 @Entity('players')
 export class Player {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
-  name: string;
+  nick: string;
 
   @JoinTable()
   @ManyToOne(() => Room, (room: Room) => room.players)
