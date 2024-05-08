@@ -1,13 +1,13 @@
 import { Player } from 'src/player/player.entity';
 import { Step } from 'src/step/step.entity';
 import {
-  Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('rooms')
@@ -15,8 +15,8 @@ export class Room {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @JoinColumn()
-  @OneToOne(() => Player, {
+  @JoinTable()
+  @ManyToOne(() => Player, (player) => player.rooms, {
     cascade: true,
   })
   host: Player;
@@ -29,9 +29,9 @@ export class Room {
   @OneToMany(() => Step, (step) => step.room)
   steps: Step[];
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdDate: Date;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updatedDate: Date;
 }

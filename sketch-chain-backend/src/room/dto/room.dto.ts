@@ -1,4 +1,3 @@
-import { Player } from 'src/player/player.entity';
 import { Room } from '../room.entity';
 import { PlayerDto } from 'src/player/dto/player.dto';
 

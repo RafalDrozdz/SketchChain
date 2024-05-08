@@ -3,11 +3,13 @@ import { Guess } from 'src/guess/guess.entity';
 import { Room } from 'src/room/room.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('players')
@@ -30,9 +32,13 @@ export class Player {
   @OneToMany(() => Drawing, (drawing: Drawing) => drawing.player)
   drawings: Drawing[];
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @JoinTable()
+  @OneToMany(() => Room, (room: Room) => room.host)
+  rooms: Room[];
+
+  @CreateDateColumn()
   createdDate: Date;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updatedDate: Date;
 }
