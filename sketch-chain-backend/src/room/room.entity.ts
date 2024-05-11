@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -15,17 +16,13 @@ export class Room {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @JoinTable()
-  @ManyToOne(() => Player, (player) => player.rooms, {
-    cascade: true,
-  })
+  @ManyToOne(() => Player, (player) => player.hostedRooms)
   host: Player;
 
+  @ManyToMany(() => Player, (player) => player.rooms)
   @JoinTable()
-  @OneToMany(() => Player, (player) => player.room)
   players: Player[];
 
-  @JoinTable()
   @OneToMany(() => Step, (step) => step.room)
   steps: Step[];
 

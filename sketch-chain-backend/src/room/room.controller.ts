@@ -3,6 +3,7 @@ import { RoomService } from './room.service';
 import { PlayerId } from 'src/player/player-id.decorator';
 import { ModifyPlayerDto } from 'src/player/dto/modify-player.dto';
 import { Response } from 'express';
+import { PLAYER_ID } from 'src/constants/cookies.constants';
 
 @Controller('rooms')
 export class RoomController {
@@ -15,7 +16,7 @@ export class RoomController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const room = await this.roomService.create(modifyPlayerDto, playerId);
-    response.cookie('player_id', room.host.id);
+    response.cookie(PLAYER_ID, room.host.id, { httpOnly: true });
     return room;
   }
 }

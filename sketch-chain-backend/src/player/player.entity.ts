@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinTable,
-  ManyToOne,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -20,21 +20,19 @@ export class Player {
   @Column()
   nick: string;
 
-  @JoinTable()
-  @ManyToOne(() => Room, (room: Room) => room.players)
-  room: Room;
+  @ManyToMany(() => Room, (room: Room) => room.players)
+  rooms: Room[];
 
-  @JoinTable()
   @OneToMany(() => Guess, (guess: Guess) => guess.player)
   guesses: Guess[];
 
-  @JoinTable()
   @OneToMany(() => Drawing, (drawing: Drawing) => drawing.player)
   drawings: Drawing[];
 
-  @JoinTable()
-  @OneToMany(() => Room, (room: Room) => room.host)
-  rooms: Room[];
+  @OneToMany(() => Room, (room: Room) => room.host, {
+    cascade: true,
+  })
+  hostedRooms: Room[];
 
   @CreateDateColumn()
   createdDate: Date;
