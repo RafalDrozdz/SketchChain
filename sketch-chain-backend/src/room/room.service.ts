@@ -13,7 +13,10 @@ export class RoomService {
     private readonly playerService: PlayerService,
   ) {}
 
-  async create(modifyPlayerDto: ModifyPlayerDto, playerId: string) {
+  async create(
+    modifyPlayerDto: ModifyPlayerDto,
+    playerId?: string,
+  ): Promise<Room> {
     const host = await this.playerService.start(modifyPlayerDto, playerId);
     const createdRoom = this.roomRepository.create({
       host,

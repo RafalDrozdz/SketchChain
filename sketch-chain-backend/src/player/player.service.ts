@@ -11,7 +11,7 @@ export class PlayerService {
     private readonly playerRepository: Repository<Player>,
   ) {}
 
-  async start(playerDto: ModifyPlayerDto, id: string): Promise<Player> {
+  async start(playerDto: ModifyPlayerDto, id?: string): Promise<Player> {
     let player: Player;
 
     if (id) {
@@ -26,8 +26,8 @@ export class PlayerService {
     return player;
   }
 
-  create({ nick }: ModifyPlayerDto): Promise<Player> {
-    const createdPlayer = this.playerRepository.create({ nick });
+  async create(modifyPlayerDto: ModifyPlayerDto): Promise<Player> {
+    const createdPlayer = await this.playerRepository.create(modifyPlayerDto);
     return this.playerRepository.save(createdPlayer);
   }
 
