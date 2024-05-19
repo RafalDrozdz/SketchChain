@@ -3,36 +3,39 @@ import { Guess } from 'src/guess/guess.entity';
 import { Room } from 'src/room/room.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToOne,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('players')
 export class Player {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
-  name: string;
+  nick: string;
 
-  @JoinTable()
-  @ManyToOne(() => Room, (room: Room) => room.players)
-  room: Room;
+  @ManyToMany(() => Room, (room: Room) => room.players)
+  rooms?: Room[];
 
-  @JoinTable()
   @OneToMany(() => Guess, (guess: Guess) => guess.player)
-  guesses: Guess[];
+  guesses?: Guess[];
 
-  @JoinTable()
   @OneToMany(() => Drawing, (drawing: Drawing) => drawing.player)
-  drawings: Drawing[];
+  drawings?: Drawing[];
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @OneToMany(() => Room, (room: Room) => room.host, {
+    cascade: true,
+  })
+  hostedRooms?: Room[];
+
+  @CreateDateColumn()
   createdDate: Date;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updatedDate: Date;
 }

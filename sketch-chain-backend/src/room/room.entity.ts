@@ -1,35 +1,34 @@
 import { Player } from 'src/player/player.entity';
 import { Step } from 'src/step/step.entity';
 import {
-  Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('rooms')
 export class Room {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @JoinColumn()
-  @OneToOne(() => Player)
+  @ManyToOne(() => Player, (player) => player.hostedRooms)
   host: Player;
 
+  @ManyToMany(() => Player, (player) => player.rooms)
   @JoinTable()
-  @OneToMany(() => Player, (player) => player.room)
   players: Player[];
 
-  @JoinTable()
   @OneToMany(() => Step, (step) => step.room)
   steps: Step[];
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdDate: Date;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updatedDate: Date;
 }
