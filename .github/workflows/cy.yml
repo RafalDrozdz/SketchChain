@@ -32,6 +32,8 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+        with:
+          cache-dependency-path: sketch-chain-backend/package-lock.json
 
       - name: Unit testing
         run: npm test
