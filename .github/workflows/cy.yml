@@ -12,6 +12,10 @@ on:
 env:
   NODE_VERSION: 20.12.2
 
+defaults:
+  run:
+    working-directory: ./sketch-chain-backend
+
 jobs:
   backend-unit-test:
     runs-on: ubuntu-latest
@@ -20,15 +24,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Change directory
-        run: cd ./sketch-chain-backend
-
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-          cache-dependency-path: sketch-chain-backend/package-lock.json
 
       - name: Install Dependencies
         run: npm install
