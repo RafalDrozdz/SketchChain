@@ -20,18 +20,18 @@ export class Player {
   nick: string;
 
   @ManyToMany(() => Room, (room: Room) => room.players)
-  rooms: Room[];
+  rooms?: Room[];
 
   @OneToMany(() => Guess, (guess: Guess) => guess.player)
-  guesses: Guess[];
+  guesses?: Guess[];
 
   @OneToMany(() => Drawing, (drawing: Drawing) => drawing.player)
-  drawings: Drawing[];
+  drawings?: Drawing[];
 
   @OneToMany(() => Room, (room: Room) => room.host, {
     cascade: true,
   })
-  hostedRooms: Room[];
+  hostedRooms?: Room[];
 
   @CreateDateColumn()
   createdDate: Date;
