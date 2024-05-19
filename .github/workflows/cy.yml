@@ -20,14 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Change directory
+        run: cd ./sketch-chain-backend
+
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-
-      - name: Change directory
-        run: cd ./sketch-chain-backend
 
       - name: Install Dependencies
         run: npm ci
