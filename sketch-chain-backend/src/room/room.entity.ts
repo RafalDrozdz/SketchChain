@@ -19,12 +19,14 @@ export class Room {
   @ManyToOne(() => Player, (player) => player.hostedRooms)
   host: Player;
 
-  @ManyToMany(() => Player, (player) => player.rooms)
+  @ManyToMany(() => Player, (player) => player.rooms, {
+    cascade: true,
+  })
   @JoinTable()
-  players: Player[];
+  players?: Player[];
 
   @OneToMany(() => Step, (step) => step.room)
-  steps: Step[];
+  steps?: Step[];
 
   @CreateDateColumn()
   createdDate: Date;
