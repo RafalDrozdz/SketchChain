@@ -9,5 +9,6 @@ import { PlayerModule } from 'src/player/player.module';
   imports: [TypeOrmModule.forFeature([Room]), PlayerModule],
   controllers: [RoomController],
   providers: [RoomService],
+  exports: [RoomService],
 })
 export class RoomModule {}

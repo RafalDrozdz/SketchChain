@@ -1,9 +1,14 @@
 import { Room } from './room.entity';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlayerService } from 'src/player/player.service';
 import { ModifyPlayerDto } from '../player/dto/modify-player.dto';
+import { StartGameDto } from './dto/start-game.dto';
 
 @Injectable()
 export class RoomService {
@@ -55,5 +60,25 @@ export class RoomService {
       throw new NotFoundException(`Room #${id} not found`);
     }
     return room;
+  }
+
+  async startGame(startGameDto: StartGameDto): Promise<Room> {
+    const { playerId, roomId } = startGameDto;
+    const room = await this.roomRepository.preload({
+      id: roomId,
+      status: 'in-progress',
+    });
+
+    if (!room) {
+      throw new NotFoundException(`Room #${roomId} not found`);
+    }
+
+    if (playerId !== room.host.id) {
+      throw new ForbiddenException(
+        `Player #${playerId} is not a host of #${room.id} room`,
+      );
+    }
+
+    return this.roomRepository.save(room);
   }
 }
