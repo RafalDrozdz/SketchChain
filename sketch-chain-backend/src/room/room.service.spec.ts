@@ -6,14 +6,17 @@ import { DataSource } from 'typeorm';
 import { PlayerService } from 'src/player/player.service';
 import { createMockRepository, MockRepository } from 'src/test/helpers';
 import { Room } from './room.entity';
-import { ModifyPlayerDto } from '../player/dto/modify-player.dto';
 import {
   modifyPlayerDtoMock,
   playerIdMock,
   playerMock,
 } from 'src/test/mocks/player.mock';
-import { roomIdMock, roomMock } from 'src/test/mocks/room.mock';
-import { NotFoundException } from '@nestjs/common';
+import {
+  roomIdMock,
+  roomInProgressMock,
+  roomMock,
+} from 'src/test/mocks/room.mock';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 describe('RoomService', () => {
   let service: RoomService;
@@ -96,6 +99,52 @@ describe('RoomService', () => {
     it('should throw NotFoundException', async () => {
       try {
         await service.join(modifyPlayerDtoMock, roomIdMock);
+        expect(false).toBeTruthy();
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toEqual(`Room #${roomIdMock} not found`);
+      }
+    });
+  });
+
+  describe('startGame', () => {
+    const startGameDtoMock = {
+      playerId: playerIdMock,
+      roomId: roomIdMock,
+    };
+
+    it('should start a game', async () => {
+      roomRepository.preload.mockResolvedValue(roomInProgressMock);
+      roomRepository.save.mockResolvedValue(roomInProgressMock);
+
+      const room = await service.startGame(startGameDtoMock);
+      expect(roomRepository.save).toBeCalled();
+      expect(roomRepository.save).toBeCalledWith(roomInProgressMock);
+      expect(room).toEqual(roomInProgressMock);
+    });
+
+    it('should throw ForbiddenException', async () => {
+      const unauthorisedPlayerId = '526946aa-7271-4490-b39b-3739ea5602a6';
+      roomRepository.preload.mockResolvedValue(roomInProgressMock);
+      roomRepository.save.mockResolvedValue(roomInProgressMock);
+
+      try {
+        await service.startGame({
+          ...startGameDtoMock,
+          playerId: unauthorisedPlayerId,
+        });
+        expect(false).toBeTruthy();
+      } catch (error) {
+        expect(error).toBeInstanceOf(ForbiddenException);
+        expect(error.message).toEqual(
+          `Player #${unauthorisedPlayerId} is not a host of #${startGameDtoMock.roomId} room`,
+        );
+      }
+    });
+
+    it('should throw NotFoundException', async () => {
+      try {
+        await service.startGame(startGameDtoMock);
         expect(false).toBeTruthy();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
