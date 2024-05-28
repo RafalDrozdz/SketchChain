@@ -3,31 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+  --color-background: #f7f4ed;
+  --color-background-rgb: 247 244 237;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --color-background-secondary: #b9b9b9;
+  --color-background-secondary-rgb: 185 185 185;
+
+  --color-text: #070603;
+  --color-text-rgb: 7 6 3;
+
+  --color-primary: #6637ee;
+  --color-primary-rgb: 102 55 238;
+
+  --box-shadow-main: 0 0 0.2rem #fff, 0 0 0.2rem #fff,
+    0 0 2rem var(--color-primary), 0 0 0.8rem var(--color-primary),
+    0 0 2.8rem var(--color-primary), inset 0 0 1.3rem var(--color-primary);
+
+  --box-shadow-input: 0px 4px 0px 0px var(--color-text);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--color-text);
+  background: var(--color-background);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+* {
+  box-sizing: border-box;
 }
