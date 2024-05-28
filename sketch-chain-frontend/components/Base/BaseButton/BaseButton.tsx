@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
+import { ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<any> {
   children?: React.ReactNode;

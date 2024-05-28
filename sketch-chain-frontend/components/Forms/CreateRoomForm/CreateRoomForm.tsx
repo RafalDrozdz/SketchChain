@@ -6,9 +6,10 @@ import { FormEvent, useState } from "react";
 
 interface Props {
   onSubmit: (nick: string) => void;
+  loading?: boolean;
 }
 
-export default function CreateRoomForm({ onSubmit }: Props) {
+export default function CreateRoomForm({ onSubmit, loading = false }: Props) {
   const t = useTranslations();
 
   const [nick, setNick] = useState("");
