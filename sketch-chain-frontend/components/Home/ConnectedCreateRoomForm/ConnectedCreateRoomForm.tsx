@@ -1,17 +1,31 @@
 "use client";
 
-import { CreateRoomForm } from "@/components/Forms";
+import { CreateRoomForm } from "@/components";
 import { useCreateRoom } from "@/hooks";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ConnectedCreateRoomForm() {
-  const { create, data, isError, isLoading } = useCreateRoom();
+  const t = useTranslations();
+  const router = useRouter();
+  const { create, isLoading } = useCreateRoom();
+
+  const createRoom = async (nick: string) => {
+    try {
+      const { id } = await create(nick);
+      router.push(`/room/${id}`);
+    } catch (error) {
+      toast.error(t("roomCreationFailed"), {
+        position: "top-center",
+      });
+    }
+  };
 
   return (
-    <div>
-      <CreateRoomForm
-        onSubmit={create}
-        loading={isLoading}
-      />
-    </div>
+    <CreateRoomForm
+      onSubmit={createRoom}
+      loading={isLoading}
+    />
   );
 }

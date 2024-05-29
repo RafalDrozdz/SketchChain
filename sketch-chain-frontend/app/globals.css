@@ -29,6 +29,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url(../assets/images/background.jpg);
+  background-size: cover;
+  background-position: center;
 }
 
 @layer utilities {
@@ -39,4 +42,9 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+h1 {
+  text-shadow: -1px -1px 0 var(--color-text), 1px -1px 0 var(--color-text),
+    -1px 1px 0 var(--color-text), 3px 3px 0 var(--color-text);
 }

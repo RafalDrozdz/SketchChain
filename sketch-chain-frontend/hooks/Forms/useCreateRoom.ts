@@ -4,22 +4,22 @@ import { useState } from "react";
 const useCreateRoom = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [data, setData] = useState(null);
 
   const create = async (nick: string) => {
     try {
       setIsError(false);
       setIsLoading(true);
       const { data } = await gameService.post("rooms", { nick });
-      setData(data);
+      return data;
     } catch (error) {
       setIsError(true);
+      throw new Error();
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { isLoading, isError, data, create };
+  return { isLoading, isError, create };
 };
 
 export default useCreateRoom;

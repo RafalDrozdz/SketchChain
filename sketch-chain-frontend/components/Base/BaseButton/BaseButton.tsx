@@ -3,6 +3,7 @@ import { ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<any> {
   children?: React.ReactNode;
+  loading?: boolean;
   className?: string;
 }
 

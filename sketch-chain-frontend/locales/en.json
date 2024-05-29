@@ -1,5 +1,7 @@
 {
   "title": "Hello world!",
   "start": "Start",
-  "enterYourNick": "Enter your nick"
+  "enterYourNick": "Enter your nick",
+  "roomCreationFailed": "Room creation failed, try again!",
+  "createGame": "Create a new game"
 }
