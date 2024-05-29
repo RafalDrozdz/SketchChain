@@ -4,6 +4,7 @@ import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,14 @@ export default async function RootLayout({ children }: Readonly<Props>) {
     <html lang={locale}>
       <body className={inter.className}>
         <Toaster />
+        <Image
+          className="-z-10 "
+          src="/images/background.jpg"
+          alt="Background picture"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
