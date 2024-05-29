@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import { Toaster } from "sonner";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,10 +17,26 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: Readonly<Props>) {
+export default async function RootLayout({ children }: Readonly<Props>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang={locale}>
+      <body className={inter.className}>
+        <Toaster />
+        <Image
+          className="-z-10 "
+          src="/images/background.jpg"
+          alt="Background picture"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }
