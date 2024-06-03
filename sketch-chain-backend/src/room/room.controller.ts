@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { PlayerId } from 'src/player/player-id.decorator';
 import { ModifyPlayerDto } from 'src/player/dto/modify-player.dto';

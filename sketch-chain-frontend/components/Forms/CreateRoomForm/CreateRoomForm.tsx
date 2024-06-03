@@ -43,7 +43,9 @@ export default function CreateRoomForm({ onSubmit, loading = false }: Props) {
         value={nick}
         onChange={handleNickInput}
       />
-      <BaseButton className="w-full">
+      <BaseButton
+        id="create-game-btn"
+        className="w-full">
         <span className="flex items-center justify-center gap-2">
           {loader}
           {t("start")}

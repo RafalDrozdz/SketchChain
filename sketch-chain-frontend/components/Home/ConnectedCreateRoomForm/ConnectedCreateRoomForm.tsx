@@ -1,7 +1,7 @@
 "use client";
 
 import { CreateRoomForm } from "@/components";
-import { useCreateRoom } from "@/hooks";
+import useCreateRoom from "@/hooks/Room/useCreateRoom";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 export default function ConnectedCreateRoomForm() {
   const t = useTranslations();
   const router = useRouter();
-  const { create, isLoading } = useCreateRoom();
+  const { create, isLoading, data } = useCreateRoom();
 
   const createRoom = async (nick: string) => {
     try {
@@ -23,9 +23,11 @@ export default function ConnectedCreateRoomForm() {
   };
 
   return (
-    <CreateRoomForm
-      onSubmit={createRoom}
-      loading={isLoading}
-    />
+    <>
+      <CreateRoomForm
+        onSubmit={createRoom}
+        loading={isLoading}
+      />
+    </>
   );
 }
