@@ -3,5 +3,8 @@
   "start": "Start",
   "enterYourNick": "Enter your nick",
   "roomCreationFailed": "Room creation failed, try again!",
-  "createGame": "Create a new game"
+  "createGame": "Create a new game",
+  "invite": "Invite",
+  "linkCopied": "Link copied",
+  "failedToCopyLink": "Failed to copy link"
 }

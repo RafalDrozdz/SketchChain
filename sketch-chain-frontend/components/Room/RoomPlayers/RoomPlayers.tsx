@@ -14,7 +14,7 @@ export default async function RoomPlayers({ players, hostId }: Props) {
     />
   ));
   return (
-    <div className="flex py-6 -ml-4 w-[calc(100%+2rem)] h-min overflow-y-auto backdrop-blur">
+    <div className="flex py-6 w-[calc(100%+2rem)] h-min overflow-y-auto backdrop-blur">
       {playersComponents}
     </div>
   );
