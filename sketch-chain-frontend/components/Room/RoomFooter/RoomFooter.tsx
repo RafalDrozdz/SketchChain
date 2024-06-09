@@ -5,7 +5,7 @@ interface Props {
 
 export default async function RoomFooter({ id }: Props) {
   return (
-    <div className="flex gap-6 w-full">
+    <div className="flex gap-6 w-full flex-grow items-end py-4">
       <RoomInviteBtn id={id} />
       <RoomStartGameBtn id={id} />
     </div>

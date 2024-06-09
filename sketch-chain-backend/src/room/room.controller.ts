@@ -16,7 +16,7 @@ export class RoomController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const room = await this.roomService.create(modifyPlayerDto, playerId);
-    response.cookie(PLAYER_ID, room.host.id, { httpOnly: true });
+    response.cookie(PLAYER_ID, room.host.id);
     return room;
   }
 
@@ -28,9 +28,12 @@ export class RoomController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const room = await this.roomService.join(modifyPlayerDto, roomId, playerId);
-    response.cookie(PLAYER_ID, room.players.at(-1).id, {
-      httpOnly: true,
-    });
+    response.cookie(PLAYER_ID, room.players.at(-1).id);
     return room;
+  }
+
+  @Get(':id')
+  get(@Param('id') roomId: string) {
+    return this.roomService.findOne(roomId);
   }
 }

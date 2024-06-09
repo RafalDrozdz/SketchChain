@@ -1,26 +1,28 @@
 import { gameService } from "@/services";
-import { cookies } from "next/headers";
+import { useState } from "react";
 
 interface State {
   data: Room | null;
   isError: boolean;
+  isLoading: boolean;
 }
 
-const useJoinRoom = () => {
-  const state: State = {
+const useJoinRoom = (id: string) => {
+  const [state, setState] = useState<State>({
     data: null,
     isError: false,
-  };
-
-  const join = async (id: string) => {
+    isLoading: false,
+  });
+  const join = async (nick: string): Promise<Room | undefined> => {
     try {
-      state.isError = false;
-      const { data } = await gameService.post(`rooms/${id}`, {
-        nick: "SnikSnikSnikSnik",
+      setState({ ...state, isError: false, isLoading: false });
+      const { data } = await gameService.post<Room>(`rooms/${id}`, {
+        nick,
       });
-      state.data = data;
-      return state.data;
+      setState({ ...state, data, isLoading: false });
+      return data;
     } catch (error) {
+      setState({ ...state, isError: true, isLoading: false });
       state.isError = true;
     }
   };

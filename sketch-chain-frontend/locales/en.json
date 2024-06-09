@@ -6,5 +6,6 @@
   "createGame": "Create a new game",
   "invite": "Invite",
   "linkCopied": "Link copied",
-  "failedToCopyLink": "Failed to copy link"
+  "failedToCopyLink": "Failed to copy link",
+  "join": "Join"
 }

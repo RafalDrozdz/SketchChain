@@ -18,18 +18,18 @@ export default function BaseButton({
 }: Props) {
   const getBackgroundClass = (variant: BaseButtonVariant) => {
     const colors: Record<BaseButtonVariant, string> = {
-      cta: "primary",
-      ghost: "background",
+      cta: "after:bg-primary",
+      ghost: "after:bg-background",
     };
-    return `after:bg-${colors[variant]}`;
+    return colors[variant];
   };
 
   const getTextClass = (variant: BaseButtonVariant) => {
     const colors: Record<BaseButtonVariant, string> = {
-      cta: "background",
-      ghost: "text",
+      cta: "text-background",
+      ghost: "text-text",
     };
-    return `text-${colors[variant]}`;
+    return colors[variant];
   };
 
   const backgroundClass = getBackgroundClass(variant);
