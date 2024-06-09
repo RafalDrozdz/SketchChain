@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseButton, BaseLoader } from "@/components/Base";
+import { BaseButton } from "@/components/Base";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
@@ -15,7 +15,7 @@ export default function RoomInviteBtn({ id }: Props) {
 
   const copyLink = () => {
     const link = window.location.origin;
-    const url = `${link}/room/${id}`;
+    const url = `${link}/room/invite/${id}`;
     try {
       navigator.clipboard.writeText(url);
       toast.success(t("linkCopied"), {

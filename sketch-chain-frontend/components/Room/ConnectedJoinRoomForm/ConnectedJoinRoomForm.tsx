@@ -19,9 +19,9 @@ export default function ConnectedJoinRoomForm({ id }: Props) {
   const joinRoom = async (nick: string) => {
     try {
       await join(nick);
-      router.refresh();
+      router.push(`/room/${id}`);
     } catch (error) {
-      toast.error(t("roomCreationFailed"), {
+      toast.error(t("roomJoiningFailed"), {
         position: "top-center",
       });
     }

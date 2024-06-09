@@ -7,5 +7,7 @@
   "invite": "Invite",
   "linkCopied": "Link copied",
   "failedToCopyLink": "Failed to copy link",
-  "join": "Join"
+  "join": "Join",
+  "roomJoiningFailed": "Joining the room failed, try again!",
+  "joinGame": "Join the game"
 }
