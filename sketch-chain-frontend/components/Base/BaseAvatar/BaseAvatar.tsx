@@ -10,7 +10,7 @@ export default function BaseAvatar({ children, className, ...props }: Props) {
   return (
     <span
       className={classnames(
-        "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+        "relative flex h-16 w-16 shrink-0 overflow-hidden rounded-full",
         className
       )}
       {...props}>
