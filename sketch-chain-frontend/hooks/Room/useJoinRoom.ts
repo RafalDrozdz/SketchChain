@@ -1,4 +1,5 @@
-import { gameService } from "@/services";
+import { socket } from "@/socket";
+import { useCookies } from "next-client-cookies";
 import { useState } from "react";
 
 interface State {
@@ -7,7 +8,9 @@ interface State {
   isLoading: boolean;
 }
 
-const useJoinRoom = (id: string) => {
+const useJoinRoom = (roomId: string) => {
+  const { set: setCookies } = useCookies();
+
   const [state, setState] = useState<State>({
     data: null,
     isError: false,
@@ -15,11 +18,10 @@ const useJoinRoom = (id: string) => {
   });
   const join = async (nick: string): Promise<Room | undefined> => {
     try {
-      setState({ ...state, isError: false, isLoading: false });
-      const { data } = await gameService.post<Room>(`rooms/${id}`, {
-        nick,
-      });
+      setState({ ...state, isError: false, isLoading: true });
+      const data = await socket.emitWithAck("join_room", { nick, roomId });
       setState({ ...state, data, isLoading: false });
+      setCookies("player_id", data.players.at(-1).id);
       return data;
     } catch (error) {
       setState({ ...state, isError: true, isLoading: false });

@@ -1,7 +1,7 @@
 import { HOST_COOKIE_NAME } from "@/constants";
-import { gameService } from "@/services";
 import { useState } from "react";
 import { useCookies } from "next-client-cookies";
+import { socket } from "@/socket";
 
 interface State {
   data: Room | null;
@@ -20,8 +20,8 @@ const useCreateRoom = () => {
 
   const create = async (nick: string) => {
     try {
-      setState({ ...state, isError: false, isLoading: false });
-      const { data } = await gameService.post("rooms", { nick });
+      setState({ ...state, isError: false, isLoading: true });
+      const data = await socket.emitWithAck("create_room", { nick });
       setState({ ...state, data, isLoading: false });
       setCookie(HOST_COOKIE_NAME, "true");
       return data;

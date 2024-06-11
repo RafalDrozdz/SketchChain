@@ -6,11 +6,7 @@ interface Props extends HtmlHTMLAttributes<any> {
   className?: string;
 }
 
-export default async function BaseAvatar({
-  children,
-  className,
-  ...props
-}: Props) {
+export default function BaseAvatar({ children, className, ...props }: Props) {
   return (
     <span
       className={classnames(

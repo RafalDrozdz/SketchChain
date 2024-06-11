@@ -38,7 +38,7 @@ export default function BaseButton({
     <button
       {...props}
       className={classnames(
-        `group relative py-2 px-6 rounded-3xl shadow-input after:content-[''] after:absolute after:w-full after:h-full after:top-0 after:left-0 after:rounded-3xl after:active:translate-y-1 after:transition  font-semibold ${backgroundClass} ${textClass}`,
+        `group relative py-2 px-6 rounded-3xl shadow-input after:content-[''] after:absolute after:w-full after:h-full after:top-0 after:left-0 after:rounded-3xl after:active:translate-y-1 after:transition  font-semibold outline-0 focus-visible:after:border-2 after:border-text ${backgroundClass} ${textClass}`,
         className
       )}>
       <span className="relative block z-10 group-active:translate-y-1 transition">

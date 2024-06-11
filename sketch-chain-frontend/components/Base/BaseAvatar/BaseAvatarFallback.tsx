@@ -6,7 +6,7 @@ interface Props extends HtmlHTMLAttributes<any> {
   className?: string;
 }
 
-export default async function BaseAvatarFallback({
+export default function BaseAvatarFallback({
   children,
   className,
   ...props

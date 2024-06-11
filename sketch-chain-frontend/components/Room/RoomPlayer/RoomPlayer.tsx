@@ -5,7 +5,7 @@ interface Props extends Player {
   host: boolean;
 }
 
-export default async function RoomPlayer({ id, nick, host }: Props) {
+export default function RoomPlayer({ id, nick, host }: Props) {
   const firstLetter = nick.at(0)?.toUpperCase();
   const preparedNick = nick.substring(0, 8);
   return (
