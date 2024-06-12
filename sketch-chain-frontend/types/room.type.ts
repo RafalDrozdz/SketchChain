@@ -1,10 +1,15 @@
-interface Player {
+export interface Player {
   id: string;
   nick: string;
+  avatarId: number;
 }
 
-interface Room {
+export interface Room {
   id: string;
   host: Player;
   players: Player[];
+}
+
+export interface RoomFormDto {
+  nick: string;
 }

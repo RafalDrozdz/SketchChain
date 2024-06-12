@@ -1,8 +1,5 @@
-import {
-  BaseAvatar,
-  BaseAvatarFallback,
-  BaseAvatarImage,
-} from "@/components/Base/BaseAvatar";
+import { BaseAvatar, BaseAvatarFallback, BaseAvatarImage } from "@/components";
+import { Player } from "@/types/room.type";
 import { faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -10,7 +7,7 @@ interface Props extends Player {
   host: boolean;
 }
 
-export default function RoomPlayer({ id, nick, host }: Props) {
+export default function RoomPlayer({ id, nick, host, avatarId }: Props) {
   const firstLetter = nick.at(0)?.toUpperCase();
   const preparedNick = nick.substring(0, 8);
   return (
@@ -25,9 +22,7 @@ export default function RoomPlayer({ id, nick, host }: Props) {
         <BaseAvatar
           id={`player-${id}`}
           className="relative">
-          <BaseAvatarImage
-            src={`/images/avatars/${Math.floor(Math.random() * 40)}.svg`}
-          />
+          <BaseAvatarImage src={`/images/avatars/${avatarId}.svg`} />
           <BaseAvatarFallback>{firstLetter}</BaseAvatarFallback>
         </BaseAvatar>
       </div>

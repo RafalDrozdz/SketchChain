@@ -1,4 +1,4 @@
-import { RoomContainer } from "@/components/Room";
+import { RoomContainer } from "@/components";
 import useRoom from "@/hooks/Room/useRoom";
 
 interface Params {

@@ -1,5 +1,6 @@
 import { RoomPlayers } from "@/components";
 import RoomFooter from "../RoomFooter/RoomFooter";
+import { Room } from "@/types/room.type";
 
 export default function RoomContainer({ id, host, players }: Room) {
   return (

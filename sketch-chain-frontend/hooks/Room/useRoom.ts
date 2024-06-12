@@ -1,4 +1,5 @@
 import { gameService } from "@/services";
+import { Room } from "@/types/room.type";
 
 interface State {
   data: Room | null;

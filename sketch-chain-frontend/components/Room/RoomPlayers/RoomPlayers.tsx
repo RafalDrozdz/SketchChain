@@ -2,6 +2,7 @@
 
 import { RoomPlayer } from "@/components";
 import { socket } from "@/socket";
+import { Player } from "@/types/room.type";
 import { useEffect, useState } from "react";
 
 interface Props {

@@ -1,7 +1,8 @@
 "use client";
 
-import { JoinRoomForm } from "@/components";
+import RoomForm from "@/components/Forms/RoomForm/RoomForm";
 import useJoinRoom from "@/hooks/Room/useJoinRoom";
+import { RoomFormDto } from "@/types/room.type";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -16,9 +17,9 @@ export default function ConnectedJoinRoomForm({ id }: Props) {
 
   const { join, isLoading } = useJoinRoom(id);
 
-  const joinRoom = async (nick: string) => {
+  const joinRoom = async (form: RoomFormDto) => {
     try {
-      await join(nick);
+      await join(form);
       router.push(`/room/${id}`);
     } catch (error) {
       toast.error(t("roomJoiningFailed"), {
@@ -28,9 +29,10 @@ export default function ConnectedJoinRoomForm({ id }: Props) {
   };
 
   return (
-    <JoinRoomForm
+    <RoomForm
       onSubmit={joinRoom}
-      loading={isLoading}
-    />
+      loading={isLoading}>
+      {t("join")}
+    </RoomForm>
   );
 }

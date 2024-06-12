@@ -1,4 +1,5 @@
 import { socket } from "@/socket";
+import { Room, RoomFormDto } from "@/types/room.type";
 import { useCookies } from "next-client-cookies";
 import { useState } from "react";
 
@@ -16,10 +17,10 @@ const useJoinRoom = (roomId: string) => {
     isError: false,
     isLoading: false,
   });
-  const join = async (nick: string): Promise<Room | undefined> => {
+  const join = async (form: RoomFormDto): Promise<Room | undefined> => {
     try {
       setState({ ...state, isError: false, isLoading: true });
-      const data = await socket.emitWithAck("join_room", { nick, roomId });
+      const data = await socket.emitWithAck("join_room", { ...form, roomId });
       setState({ ...state, data, isLoading: false });
       setCookies("player_id", data.players.at(-1).id);
       return data;

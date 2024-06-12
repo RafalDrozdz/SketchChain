@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseButton, BaseLoader } from "@/components/Base";
+import { BaseButton } from "@/components";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";

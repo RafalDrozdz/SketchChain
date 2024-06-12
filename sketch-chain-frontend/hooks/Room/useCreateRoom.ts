@@ -2,6 +2,7 @@ import { HOST_COOKIE_NAME } from "@/constants";
 import { useState } from "react";
 import { useCookies } from "next-client-cookies";
 import { socket } from "@/socket";
+import { Room, RoomFormDto } from "@/types/room.type";
 
 interface State {
   data: Room | null;
@@ -18,10 +19,10 @@ const useCreateRoom = () => {
 
   const { set: setCookie } = useCookies();
 
-  const create = async (nick: string) => {
+  const create = async (form: RoomFormDto) => {
     try {
       setState({ ...state, isError: false, isLoading: true });
-      const data = await socket.emitWithAck("create_room", { nick });
+      const data = await socket.emitWithAck("create_room", form);
       setState({ ...state, data, isLoading: false });
       setCookie(HOST_COOKIE_NAME, "true");
       return data;

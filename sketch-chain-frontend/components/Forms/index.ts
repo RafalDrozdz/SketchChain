@@ -1,2 +1,1 @@
-export * from "./CreateRoomForm";
-export * from "./JoinRoomForm";
+export * from "./RoomForm";

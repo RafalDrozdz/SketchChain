@@ -19,6 +19,11 @@ export class Player {
   @Column()
   nick: string;
 
+  @Column({
+    type: 'smallint',
+  })
+  avatarId: number;
+
   @ManyToMany(() => Room, (room: Room) => room.players)
   rooms?: Room[];
 
