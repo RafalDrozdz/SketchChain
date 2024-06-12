@@ -28,9 +28,13 @@ export class EventsGateway {
 
   @SubscribeMessage('join_room')
   async joinRoom(client: Socket, payload: JoinRoomDto) {
-    const { nick, roomId, playerId } = payload;
+    const { nick, avatarId, roomId, playerId } = payload;
     client.join(roomId);
-    const room = await this.roomService.join({ nick }, roomId, playerId);
+    const room = await this.roomService.join(
+      { nick, avatarId },
+      roomId,
+      playerId,
+    );
     const websocketRoom = this.server.to(roomId);
     websocketRoom.emit('joined_room', room.players.at(-1));
     return room;

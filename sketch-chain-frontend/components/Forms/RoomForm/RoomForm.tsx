@@ -29,7 +29,7 @@ export default function RoomForm({
 
   const [form, setForm] = useState({
     nick: "",
-    avatarId: random(1, AMOUNT_OF_AVATARS),
+    avatarId: 1,
   });
 
   const handleNickInput = (event: FormEvent<HTMLInputElement>) => {
@@ -45,6 +45,8 @@ export default function RoomForm({
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
+    console.log("send", form);
+
     onSubmit(form);
   };
 

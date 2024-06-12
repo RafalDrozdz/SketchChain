@@ -12,4 +12,7 @@ export const playerMock: Player = {
   updatedDate: new Date(),
 };
 
-export const modifyPlayerDtoMock: ModifyPlayerDto = { nick: 'Random Name' };
+export const modifyPlayerDtoMock: ModifyPlayerDto = {
+  nick: 'Random Name',
+  avatarId: playerAvatarId,
+};

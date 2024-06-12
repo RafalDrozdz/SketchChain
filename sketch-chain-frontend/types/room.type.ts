@@ -12,4 +12,5 @@ export interface Room {
 
 export interface RoomFormDto {
   nick: string;
+  avatarId: number;
 }

@@ -17,7 +17,7 @@ export default function ConnectedJoinRoomForm({ id }: Props) {
 
   const { join, isLoading } = useJoinRoom(id);
 
-  const joinRoom = async (form: RoomFormDto) => {
+  const joinRoom = async (form: RoomFormDto): Promise<void> => {
     try {
       await join(form);
       router.push(`/room/${id}`);

@@ -15,12 +15,12 @@ export class JoinRoomDto {
   @IsUUID()
   readonly roomId: string;
 
-  @IsUUID()
-  @IsOptional()
-  readonly playerId?: string;
-
   @IsPositive()
   @Max(AMOUNT_OF_AVATARS)
   @IsInt()
   readonly avatarId: number;
+
+  @IsUUID()
+  @IsOptional()
+  readonly playerId?: string;
 }
