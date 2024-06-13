@@ -10,27 +10,32 @@ interface State {
 }
 
 const useJoinRoom = (roomId: string) => {
+  const [data, setData] = useState<Room | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   const { set: setCookies } = useCookies();
 
-  const [state, setState] = useState<State>({
-    data: null,
-    isError: false,
-    isLoading: false,
-  });
   const join = async (form: RoomFormDto): Promise<Room | undefined> => {
+    let data;
+
     try {
-      setState({ ...state, isError: false, isLoading: true });
-      const data = await socket.emitWithAck("join_room", { ...form, roomId });
-      setState({ ...state, data, isLoading: false });
+      setIsError(false);
+      setIsLoading(true);
+      data = await socket.emitWithAck("join_room", { ...form, roomId });
+      setData(data);
       setCookies("player_id", data.players.at(-1).id);
-      return data;
     } catch (error) {
-      setState({ ...state, isError: true, isLoading: false });
-      state.isError = true;
+      setIsError(true);
+      throw new Error();
+    } finally {
+      setIsLoading(false);
     }
+
+    return data;
   };
 
-  return { join, ...state };
+  return { join, data, isLoading, isError };
 };
 
 export default useJoinRoom;

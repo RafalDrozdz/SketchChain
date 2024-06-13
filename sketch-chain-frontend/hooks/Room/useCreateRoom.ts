@@ -1,38 +1,35 @@
 import { HOST_COOKIE_NAME } from "@/constants";
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import { useCookies } from "next-client-cookies";
 import { socket } from "@/socket";
 import { Room, RoomFormDto } from "@/types/room.type";
 
-interface State {
-  data: Room | null;
-  isError: boolean;
-  isLoading: boolean;
-}
-
 const useCreateRoom = () => {
-  const [state, setState] = useState<State>({
-    data: null,
-    isError: false,
-    isLoading: false,
-  });
+  const [data, setData] = useState<Room | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const { set: setCookie } = useCookies();
 
   const create = async (form: RoomFormDto) => {
+    let data;
     try {
-      setState({ ...state, isError: false, isLoading: true });
-      const data = await socket.emitWithAck("create_room", form);
-      setState({ ...state, data, isLoading: false });
+      setIsError(false);
+      setIsLoading(false);
+      data = await socket.emitWithAck("create_room", form);
+      setData(data);
       setCookie(HOST_COOKIE_NAME, "true");
-      return data;
     } catch (error) {
-      setState({ ...state, isError: true, isLoading: false });
+      setIsError(true);
       throw new Error();
+    } finally {
+      setIsLoading(false);
     }
+
+    return data;
   };
 
-  return { create, ...state };
+  return { create, data, isLoading, isError };
 };
 
 export default useCreateRoom;

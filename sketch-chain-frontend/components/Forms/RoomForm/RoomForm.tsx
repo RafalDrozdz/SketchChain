@@ -10,7 +10,6 @@ import { AMOUNT_OF_AVATARS } from "@/constants";
 import { RoomFormDto } from "@/types/room.type";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { random } from "lodash";
 import { useTranslations } from "next-intl";
 import { FormEvent, useState } from "react";
 
@@ -45,8 +44,6 @@ export default function RoomForm({
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log("send", form);
-
     onSubmit(form);
   };
 
