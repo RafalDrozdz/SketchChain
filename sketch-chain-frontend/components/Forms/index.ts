@@ -1,1 +1,1 @@
-export * from "./CreateRoomForm";
+export * from "./RoomForm";

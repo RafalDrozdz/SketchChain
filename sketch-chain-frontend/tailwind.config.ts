@@ -21,6 +21,12 @@ const config: Config = {
       secondary: "rgb(var(--color-secondary-rgb) / <alpha-value>)",
     },
   },
+  variants: {
+    extend: {
+      // ...
+      backgroundOpacity: ["active"],
+    },
+  },
   plugins: [],
 };
 export default config;

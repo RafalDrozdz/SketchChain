@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
 import Image from "next/image";
+import { CookiesProvider } from "next-client-cookies/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +35,7 @@ export default async function RootLayout({ children }: Readonly<Props>) {
           objectPosition="center"
         />
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <CookiesProvider>{children}</CookiesProvider>
         </NextIntlClientProvider>
       </body>
     </html>

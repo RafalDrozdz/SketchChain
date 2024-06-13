@@ -54,7 +54,7 @@ export class RoomService {
   async findOne(id: string): Promise<Room> {
     const room = await this.roomRepository.findOne({
       where: { id },
-      relations: ['players'],
+      relations: ['players', 'host'],
     });
     if (!room) {
       throw new NotFoundException(`Room #${id} not found`);
