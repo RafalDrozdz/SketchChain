@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Player } from './player.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ModifyPlayerDto } from './dto/modify-player.dto';
+import { modifyPlayerDtoMock } from '../test/mocks/player.mock';
 
 @Injectable()
 export class PlayerService {
@@ -31,10 +32,10 @@ export class PlayerService {
     return this.playerRepository.save(createdPlayer);
   }
 
-  async update(id: string, { nick }: ModifyPlayerDto) {
+  async update(id: string, modifyPlayerDto: ModifyPlayerDto) {
     const player = await this.playerRepository.preload({
       id,
-      nick,
+      ...modifyPlayerDto,
     });
 
     if (!player) {
