@@ -11,15 +11,20 @@ interface Props {
 }
 
 export default function RoomPlayers({ players, hostId }: Props) {
-  const [allPlayers, setAddedPlayers] = useState<Player[]>(players);
+  const [allPlayers, setAllPlayers] = useState<Player[]>(players);
 
   useEffect(() => {
     socket.on("joined_room", (player: Player) => {
-      setAddedPlayers((prev) => [...prev, player]);
+      setAllPlayers((prev) => [...prev, player]);
+    });
+
+    socket.on("left_room", (playerId: string) => {
+      setAllPlayers((prev) => prev.filter((player) => player.id !== playerId));
     });
 
     return () => {
       socket.removeListener("joined_room");
+      socket.removeListener("left_room");
     };
   }, []);
 

@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { Player } from './player.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ModifyPlayerDto } from './dto/modify-player.dto';
-import { modifyPlayerDtoMock } from '../test/mocks/player.mock';
 
 @Injectable()
 export class PlayerService {

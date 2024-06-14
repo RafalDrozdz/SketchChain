@@ -1,5 +1,6 @@
 import { Room } from './room.entity';
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -27,6 +28,7 @@ export class RoomService {
       host,
       players: [host],
     });
+
     return this.roomRepository.save(createdRoom);
   }
 
@@ -40,6 +42,7 @@ export class RoomService {
       playerId,
     );
     const room = await this.findOne(roomId);
+
     const isPlayerAlready: boolean = room.players.some(
       (player) => player.id === createdPlayer.id,
     );
@@ -48,6 +51,12 @@ export class RoomService {
       room.players.push(createdPlayer);
     }
 
+    return this.roomRepository.save(room);
+  }
+
+  async leave(roomId: string, playerId: string) {
+    const room = await this.findOne(roomId);
+    room.players = room.players.filter((player) => player.id !== playerId);
     return this.roomRepository.save(room);
   }
 

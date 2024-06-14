@@ -6,4 +6,5 @@ export interface ServerToClientEvents {
   created_room: (payload: Room) => void;
   joined_room: (payload: Player) => void;
   game_started: () => void;
+  left_room: (playerId: string) => void;
 }
