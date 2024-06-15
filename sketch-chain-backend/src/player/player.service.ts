@@ -11,16 +11,17 @@ export class PlayerService {
     private readonly playerRepository: Repository<Player>,
   ) {}
 
-  async start(playerDto: ModifyPlayerDto, id?: string): Promise<Player> {
+  async start(modifyPlayerDto: ModifyPlayerDto): Promise<Player> {
+    const { playerId } = modifyPlayerDto;
     let player: Player;
 
-    if (id) {
+    if (playerId) {
       try {
-        player = await this.update(id, playerDto);
+        player = await this.update(playerId, modifyPlayerDto);
       } catch (error) {}
     }
     if (!player) {
-      player = await this.create(playerDto);
+      player = await this.create(modifyPlayerDto);
     }
 
     return player;

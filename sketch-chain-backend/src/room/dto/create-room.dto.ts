@@ -1,12 +1,3 @@
-import { IsString, IsPositive, Max, IsInt } from 'class-validator';
-import { AMOUNT_OF_AVATARS } from 'src/constants/room.constants';
+import { ModifyPlayerDto } from 'src/player/dto/modify-player.dto';
 
-export class CreateRoomDto {
-  @IsString()
-  readonly nick: string;
-
-  @IsPositive()
-  @Max(AMOUNT_OF_AVATARS)
-  @IsInt()
-  readonly avatarId: number;
-}
+export class CreateRoomDto extends ModifyPlayerDto {}

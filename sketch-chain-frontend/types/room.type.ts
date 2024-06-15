@@ -2,11 +2,11 @@ export interface Player {
   id: string;
   nick: string;
   avatarId: number;
+  host: boolean;
 }
 
 export interface Room {
   id: string;
-  host: Player;
   players: Player[];
 }
 

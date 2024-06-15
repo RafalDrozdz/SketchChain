@@ -8,9 +8,11 @@ import { ServerToClientEvents } from './types/event.types';
 import { RoomService } from 'src/room/room.service';
 import { StartGameDto } from '../room/dto/start-game.dto';
 import { JoinRoomDto } from 'src/room/dto/join-room.dto';
-import { CreateRoomDto } from 'src/room/dto/create-room.dto';
 import { ConnectionService } from 'src/connection/connection.service';
-import { Room } from 'src/room/room.entity';
+import { CreateRoomDto } from 'src/room/dto/create-room.dto';
+import { plainToInstance } from 'class-transformer';
+import { ResponseRoomDto } from 'src/room/dto/response-room.dto';
+import { ResponsePlayerDto } from 'src/player/dto/response-player.dto';
 
 @WebSocketGateway({ namespace: 'events', cors: true })
 export class EventsGateway {
@@ -23,7 +25,10 @@ export class EventsGateway {
   ) {}
 
   @SubscribeMessage('create_room')
-  async createRoom(client: Socket, payload: CreateRoomDto): Promise<Room> {
+  async createRoom(
+    client: Socket,
+    payload: CreateRoomDto,
+  ): Promise<ResponseRoomDto> {
     const room = await this.roomService.create(payload);
 
     await this.connectionService.create({
@@ -33,23 +38,24 @@ export class EventsGateway {
     });
 
     client.join(room.id);
-    const websocketRoom = this.server.to(room.id);
-    websocketRoom.emit('created_room', room);
 
-    client.on('disconnecting', () => {
-      this.handleDisconnectFromRoom(client);
-    });
-    return room;
+    const websocketRoom = this.server.to(room.id);
+    const responseRoomDto = plainToInstance(ResponseRoomDto, room);
+
+    websocketRoom.emit('created_room', responseRoomDto);
+    client.on('disconnecting', () => this.handleDisconnectFromRoom(client.id));
+
+    return responseRoomDto;
   }
 
   @SubscribeMessage('join_room')
-  async joinRoom(client: Socket, payload: JoinRoomDto): Promise<Room> {
-    const { nick, avatarId, roomId, playerId } = payload;
-    const room = await this.roomService.join(
-      { nick, avatarId },
-      roomId,
-      playerId,
-    );
+  async joinRoom(
+    client: Socket,
+    payload: JoinRoomDto,
+  ): Promise<ResponseRoomDto> {
+    const { roomId } = payload;
+    const room = await this.roomService.join(payload);
+    const createdPlayer = room.players.at(-1);
 
     await this.connectionService.create({
       socketId: client.id,
@@ -58,13 +64,17 @@ export class EventsGateway {
     });
 
     client.join(room.id);
-    const websocketRoom = this.server.to(roomId);
-    websocketRoom.emit('joined_room', room.players.at(-1));
 
-    client.on('disconnecting', () => {
-      this.handleDisconnectFromRoom(client);
-    });
-    return room;
+    const websocketRoom = this.server.to(roomId);
+
+    websocketRoom.emit(
+      'joined_room',
+      plainToInstance(ResponsePlayerDto, createdPlayer),
+    );
+
+    client.on('disconnecting', () => this.handleDisconnectFromRoom(client.id));
+
+    return plainToInstance(ResponseRoomDto, room);
   }
 
   @SubscribeMessage('start_game')
@@ -75,12 +85,11 @@ export class EventsGateway {
     websocketRoom.emit('game_started');
   }
 
-  async handleDisconnectFromRoom(client: Socket): Promise<void> {
-    const { playerId, roomId } = await this.connectionService.findOne(
-      client.id,
-    );
-    await this.roomService.leave(roomId, playerId);
+  async handleDisconnectFromRoom(socketId: string): Promise<void> {
+    const { playerId, roomId } = await this.connectionService.findOne(socketId);
+    const room = await this.roomService.leave(roomId, playerId);
     const websocketRoom = this.server.to(roomId);
     websocketRoom.emit('left_room', playerId);
+    websocketRoom.emit('host', room.host.id);
   }
 }

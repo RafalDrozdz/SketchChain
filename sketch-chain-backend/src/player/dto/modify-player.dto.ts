@@ -1,4 +1,11 @@
-import { IsInt, IsPositive, IsString, Max } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+  IsUUID,
+  Max,
+} from 'class-validator';
 import { AMOUNT_OF_AVATARS } from 'src/constants/room.constants';
 
 export class ModifyPlayerDto {
@@ -9,4 +16,8 @@ export class ModifyPlayerDto {
   @Max(AMOUNT_OF_AVATARS)
   @IsInt()
   readonly avatarId: number;
+
+  @IsUUID()
+  @IsOptional()
+  readonly playerId?: string;
 }

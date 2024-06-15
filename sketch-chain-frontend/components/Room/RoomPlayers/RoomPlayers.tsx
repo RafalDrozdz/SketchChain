@@ -7,15 +7,20 @@ import { useEffect, useState } from "react";
 
 interface Props {
   players: Player[];
-  hostId: string;
 }
 
-export default function RoomPlayers({ players, hostId }: Props) {
+export default function RoomPlayers({ players }: Props) {
   const [allPlayers, setAllPlayers] = useState<Player[]>(players);
 
   useEffect(() => {
     socket.on("joined_room", (player: Player) => {
       setAllPlayers((prev) => [...prev, player]);
+    });
+
+    socket.on("host", (playerId: string) => {
+      setAllPlayers((prev) =>
+        prev.map((player) => ({ ...player, host: player.id === playerId }))
+      );
     });
 
     socket.on("left_room", (playerId: string) => {
@@ -31,7 +36,6 @@ export default function RoomPlayers({ players, hostId }: Props) {
   const playersComponents = allPlayers.map((player) => (
     <RoomPlayer
       {...player}
-      host={hostId === player.id}
       key={player.id}
     />
   ));
