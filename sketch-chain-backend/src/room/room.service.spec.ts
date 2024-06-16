@@ -10,13 +10,17 @@ import {
   modifyPlayerDtoMock,
   playerIdMock,
   playerMock,
+  secondPlayerIdMock,
+  secondPlayerMock,
 } from 'src/test/mocks/player.mock';
 import {
+  joinRoomDtoMock,
   roomIdMock,
   roomInProgressMock,
   roomMock,
 } from 'src/test/mocks/room.mock';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { cloneDeep } from 'lodash';
 
 describe('RoomService', () => {
   let service: RoomService;
@@ -62,7 +66,7 @@ describe('RoomService', () => {
     it('should create a room with updated user', async () => {
       roomRepository.save.mockResolvedValue(roomMock);
 
-      const room = await service.create(modifyPlayerDtoMock, playerIdMock);
+      const room = await service.create(modifyPlayerDtoMock);
       expect(roomRepository.save).toBeCalled();
       expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
       expect(room).toEqual(roomMock);
@@ -75,7 +79,7 @@ describe('RoomService', () => {
       roomRepository.save.mockResolvedValue(roomMock);
       playerRepository.save.mockResolvedValue(playerMock);
 
-      const room = await service.join(modifyPlayerDtoMock, roomIdMock);
+      const room = await service.join(joinRoomDtoMock);
       expect(roomRepository.save).toBeCalled();
       expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
       expect(room).toEqual(roomMock);
@@ -86,11 +90,7 @@ describe('RoomService', () => {
       roomRepository.save.mockResolvedValue(roomMock);
       playerRepository.save.mockResolvedValue(playerMock);
 
-      const room = await service.join(
-        modifyPlayerDtoMock,
-        roomIdMock,
-        playerIdMock,
-      );
+      const room = await service.join(joinRoomDtoMock);
       expect(roomRepository.save).toBeCalled();
       expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
       expect(room).toEqual(roomMock);
@@ -98,7 +98,7 @@ describe('RoomService', () => {
 
     it('should throw NotFoundException', async () => {
       try {
-        await service.join(modifyPlayerDtoMock, roomIdMock);
+        await service.join(joinRoomDtoMock);
         expect(false).toBeTruthy();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
@@ -150,6 +150,55 @@ describe('RoomService', () => {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toEqual(`Room #${roomIdMock} not found`);
       }
+    });
+  });
+
+  describe('leave', () => {
+    it('should remove player from room', async () => {
+      const clonedRoomMock = cloneDeep(roomMock);
+      roomRepository.findOne.mockResolvedValue(clonedRoomMock);
+      roomRepository.save.mockResolvedValue(clonedRoomMock);
+
+      const room = await service.leave(roomIdMock, secondPlayerIdMock);
+      const expectedResult: Room = {
+        ...clonedRoomMock,
+        players: [playerMock],
+      };
+
+      expect(roomRepository.save).toBeCalled();
+      expect(roomRepository.save).toBeCalledWith(expectedResult);
+      expect(room).toEqual(expectedResult);
+    });
+
+    it('should remove player from room and set new host', async () => {
+      const clonedRoomMock = cloneDeep(roomMock);
+
+      roomRepository.findOne.mockResolvedValue(clonedRoomMock);
+      roomRepository.save.mockResolvedValue(clonedRoomMock);
+
+      const room = await service.leave(roomIdMock, playerIdMock);
+      const expectedResult: Room = {
+        ...clonedRoomMock,
+        host: secondPlayerMock,
+        players: [secondPlayerMock],
+      };
+
+      expect(roomRepository.save).toBeCalled();
+      expect(roomRepository.save).toBeCalledWith(expectedResult);
+      expect(room).toEqual(expectedResult);
+    });
+
+    it('should remove players from room and remove room', async () => {
+      const clonedRoomMock = cloneDeep(roomMock);
+
+      roomRepository.findOne.mockResolvedValue(clonedRoomMock);
+      roomRepository.save.mockResolvedValue(clonedRoomMock);
+
+      await service.leave(roomIdMock, playerIdMock);
+      await service.leave(roomIdMock, secondPlayerIdMock);
+
+      expect(roomRepository.remove).toBeCalled();
+      expect(roomRepository.save).toBeCalled();
     });
   });
 });

@@ -19,16 +19,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
-  // registerGlobals(app);
   await app.listen(4000);
-}
-
-export function registerGlobals(app: INestApplication) {
-  app.useGlobalInterceptors(
-    new ClassSerializerInterceptor(app.get(Reflector), {
-      strategy: 'excludeAll',
-    }),
-  );
 }
 
 bootstrap();

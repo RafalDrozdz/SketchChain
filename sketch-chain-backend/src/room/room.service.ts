@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlayerService } from 'src/player/player.service';
-import { ModifyPlayerDto } from '../player/dto/modify-player.dto';
 import { StartGameDto } from './dto/start-game.dto';
 import { JoinRoomDto } from './dto/join-room.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -52,14 +51,13 @@ export class RoomService {
 
     const player = room.players.find((player) => player.id === playerId);
 
-    if (player.id === room.host.id) {
-      const newHost = room.players.find((player) => player.id !== playerId);
-      room.host = newHost;
-    }
-
     room.players = room.players.filter((player) => player.id !== playerId);
 
-    if (!room.players.length) this.roomRepository.remove(room);
+    if (!room.players.length) {
+      this.roomRepository.remove(room);
+    } else if (player.id === room.host.id) {
+      room.host = room.players?.[0];
+    }
 
     return this.roomRepository.save(room);
   }
