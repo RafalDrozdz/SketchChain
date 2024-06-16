@@ -54,9 +54,9 @@ export class RoomService {
     room.players = room.players.filter((player) => player.id !== playerId);
 
     if (!room.players.length) {
-      this.roomRepository.remove(room);
+      return this.roomRepository.remove(room);
     } else if (player.id === room.host.id) {
-      room.host = room.players?.[0];
+      room.host = room.players[0];
     }
 
     return this.roomRepository.save(room);

@@ -188,7 +188,7 @@ describe('RoomService', () => {
       expect(room).toEqual(expectedResult);
     });
 
-    it('should remove players from room and remove room', async () => {
+    it('should remove room', async () => {
       const clonedRoomMock = cloneDeep(roomMock);
 
       roomRepository.findOne.mockResolvedValue(clonedRoomMock);

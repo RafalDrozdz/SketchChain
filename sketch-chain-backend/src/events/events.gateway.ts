@@ -13,6 +13,7 @@ import { CreateRoomDto } from 'src/room/dto/create-room.dto';
 import { plainToInstance } from 'class-transformer';
 import { ResponseRoomDto } from 'src/room/dto/response-room.dto';
 import { ResponsePlayerDto } from 'src/player/dto/response-player.dto';
+import { Room } from 'src/room/room.entity';
 
 @WebSocketGateway({ namespace: 'events', cors: true })
 export class EventsGateway {
