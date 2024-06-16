@@ -10,7 +10,7 @@ import { toast } from "sonner";
 export default function ConnectedCreateRoomForm() {
   const t = useTranslations();
   const router = useRouter();
-  const { create, isLoading, data } = useCreateRoom();
+  const { create, isLoading } = useCreateRoom();
 
   const createRoom = async (form: RoomFormDto) => {
     try {

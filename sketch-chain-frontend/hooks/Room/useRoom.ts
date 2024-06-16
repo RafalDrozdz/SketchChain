@@ -17,9 +17,9 @@ const useRoom = () => {
   const fetch = async (id: string): Promise<Room | undefined> => {
     try {
       state.isError = false;
-      const { data } = await gameService.get<Room>(`rooms/${id}`);
+      const { data } = await gameService.get(`rooms/${id}`);
       state.data = data;
-      return state.data;
+      return state.data as Room;
     } catch (error) {
       state.isError = true;
     }

@@ -1,26 +1,7 @@
-import {
-  IsUUID,
-  IsString,
-  IsOptional,
-  IsPositive,
-  Max,
-  IsInt,
-} from 'class-validator';
-import { AMOUNT_OF_AVATARS } from 'src/constants/room.constants';
+import { IsUUID } from 'class-validator';
+import { ModifyPlayerDto } from 'src/player/dto/modify-player.dto';
 
-export class JoinRoomDto {
-  @IsString()
-  readonly nick: string;
-
+export class JoinRoomDto extends ModifyPlayerDto {
   @IsUUID()
   readonly roomId: string;
-
-  @IsPositive()
-  @Max(AMOUNT_OF_AVATARS)
-  @IsInt()
-  readonly avatarId: number;
-
-  @IsUUID()
-  @IsOptional()
-  readonly playerId?: string;
 }

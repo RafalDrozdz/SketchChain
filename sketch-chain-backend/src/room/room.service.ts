@@ -7,8 +7,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlayerService } from 'src/player/player.service';
-import { ModifyPlayerDto } from '../player/dto/modify-player.dto';
 import { StartGameDto } from './dto/start-game.dto';
+import { JoinRoomDto } from './dto/join-room.dto';
+import { CreateRoomDto } from './dto/create-room.dto';
 
 @Injectable()
 export class RoomService {
@@ -18,34 +19,44 @@ export class RoomService {
     private readonly playerService: PlayerService,
   ) {}
 
-  async create(
-    modifyPlayerDto: ModifyPlayerDto,
-    playerId?: string,
-  ): Promise<Room> {
-    const host = await this.playerService.start(modifyPlayerDto, playerId);
+  async create(createRoomDto: CreateRoomDto): Promise<Room> {
+    const host = await this.playerService.start(createRoomDto);
     const createdRoom = this.roomRepository.create({
       host,
       players: [host],
     });
+
     return this.roomRepository.save(createdRoom);
   }
 
-  async join(
-    modifyPlayerDto: ModifyPlayerDto,
-    roomId: string,
-    playerId?: string,
-  ): Promise<Room> {
-    const createdPlayer = await this.playerService.start(
-      modifyPlayerDto,
-      playerId,
-    );
+  async join(joinRoomDto: JoinRoomDto): Promise<Room> {
+    const { roomId, ...modifyPlayerDto } = joinRoomDto;
+
+    const createdPlayer = await this.playerService.start(modifyPlayerDto);
     const room = await this.findOne(roomId);
+
     const isPlayerAlready: boolean = room.players.some(
       (player) => player.id === createdPlayer.id,
     );
 
     if (!isPlayerAlready) {
       room.players.push(createdPlayer);
+    }
+
+    return this.roomRepository.save(room);
+  }
+
+  async leave(roomId: string, playerId: string) {
+    const room = await this.findOne(roomId);
+
+    const player = room.players.find((player) => player.id === playerId);
+
+    room.players = room.players.filter((player) => player.id !== playerId);
+
+    if (!room.players.length) {
+      return this.roomRepository.remove(room);
+    } else if (player.id === room.host.id) {
+      room.host = room.players[0];
     }
 
     return this.roomRepository.save(room);
