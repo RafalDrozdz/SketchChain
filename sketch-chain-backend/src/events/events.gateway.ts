@@ -13,7 +13,6 @@ import { CreateRoomDto } from 'src/room/dto/create-room.dto';
 import { plainToInstance } from 'class-transformer';
 import { ResponseRoomDto } from 'src/room/dto/response-room.dto';
 import { ResponsePlayerDto } from 'src/player/dto/response-player.dto';
-import { Room } from 'src/room/room.entity';
 
 @WebSocketGateway({ namespace: 'events', cors: true })
 export class EventsGateway {
@@ -55,27 +54,34 @@ export class EventsGateway {
     payload: JoinRoomDto,
   ): Promise<ResponseRoomDto> {
     const { roomId } = payload;
-    const room = await this.roomService.join(payload);
-    const createdPlayer = room.players.at(-1);
+    try {
+      const room = await this.roomService.join(payload);
+      console.log(room);
+      const createdPlayer = room.players.at(-1);
 
-    await this.connectionService.create({
-      socketId: client.id,
-      playerId: room.players.at(-1).id,
-      roomId: room.id,
-    });
+      await this.connectionService.create({
+        socketId: client.id,
+        playerId: room.players.at(-1).id,
+        roomId: room.id,
+      });
 
-    client.join(room.id);
+      client.join(room.id);
 
-    const websocketRoom = this.server.to(roomId);
+      const websocketRoom = this.server.to(roomId);
 
-    websocketRoom.emit(
-      'joined_room',
-      plainToInstance(ResponsePlayerDto, createdPlayer),
-    );
+      websocketRoom.emit(
+        'joined_room',
+        plainToInstance(ResponsePlayerDto, createdPlayer),
+      );
 
-    client.on('disconnecting', () => this.handleDisconnectFromRoom(client.id));
+      client.on('disconnecting', () =>
+        this.handleDisconnectFromRoom(client.id),
+      );
 
-    return plainToInstance(ResponseRoomDto, room);
+      return plainToInstance(ResponseRoomDto, room);
+    } catch (error) {
+      return error;
+    }
   }
 
   @SubscribeMessage('start_game')

@@ -9,5 +9,6 @@
   "failedToCopyLink": "Failed to copy link",
   "join": "Join",
   "roomJoiningFailed": "Joining the room failed, try again!",
-  "joinGame": "Join the game"
+  "joinGame": "Join the game",
+  "gameNotFound": "Game not found"
 }
