@@ -1,31 +1,20 @@
 import { gameService } from "@/services";
 import { Room } from "@/types/room.type";
-
-interface State {
-  data: Room | null;
-  isError: boolean;
-}
+import { AxiosError } from "axios";
 
 const useRoom = () => {
   "use sever";
 
-  const state: State = {
-    data: null,
-    isError: false,
-  };
-
   const fetch = async (id: string): Promise<Room | undefined> => {
     try {
-      state.isError = false;
       const { data } = await gameService.get(`rooms/${id}`);
-      state.data = data;
-      return state.data as Room;
+      return data;
     } catch (error) {
-      state.isError = true;
+      throw error;
     }
   };
 
-  return { fetch, ...state };
+  return { fetch };
 };
 
 export default useRoom;
