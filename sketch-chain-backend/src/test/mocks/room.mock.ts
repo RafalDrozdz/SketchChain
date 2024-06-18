@@ -3,7 +3,9 @@ import { Room } from 'src/room/room.entity';
 import {
   modifyPlayerDtoMock,
   playerMock,
+  secondModifyPlayerDtoMock,
   secondPlayerMock,
+  thirdModifyPlayerDtoMock,
 } from 'src/test/mocks/player.mock';
 
 export const roomIdMock = '04abb85f-b7ce-4df5-b273-7e9491f18267';
@@ -28,5 +30,10 @@ export const roomInProgressMock: Room = {
 
 export const joinRoomDtoMock: JoinRoomDto = {
   ...modifyPlayerDtoMock,
+  roomId: roomIdMock,
+};
+
+export const secondJoinRoomDtoMock: JoinRoomDto = {
+  ...secondModifyPlayerDtoMock,
   roomId: roomIdMock,
 };

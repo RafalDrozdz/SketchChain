@@ -56,7 +56,6 @@ export class EventsGateway {
     const { roomId } = payload;
     try {
       const room = await this.roomService.join(payload);
-      console.log(room);
       const createdPlayer = room.players.at(-1);
 
       await this.connectionService.create({

@@ -1,5 +1,6 @@
 import { Room } from './room.entity';
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -39,8 +40,11 @@ export class RoomService {
       (player) => player.id === createdPlayer.id,
     );
 
-    if (!isPlayerAlready) {
-      room.players.push(createdPlayer);
+    if (!isPlayerAlready) room.players.push(createdPlayer);
+    else {
+      throw new ConflictException(
+        `Player #${createdPlayer.id} already in room #${roomId}`,
+      );
     }
 
     return this.roomRepository.save(room);
