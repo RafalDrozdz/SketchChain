@@ -3,7 +3,7 @@
 import RoomForm from "@/components/Forms/RoomForm/RoomForm";
 import useJoinRoom from "@/hooks/Room/useJoinRoom";
 import { RoomFormDto } from "@/types/room.type";
-import { checkIsBackendError, checkIsNotFound } from "@/utils/error.utils";
+import { checkIsConflict, checkIsNotFound } from "@/utils/error.utils";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -25,6 +25,10 @@ export default function ConnectedJoinRoomForm({ id }: Props) {
     } catch (error) {
       if (checkIsNotFound(error)) {
         toast.error(t("gameNotFound"), {
+          position: "top-center",
+        });
+      } else if (checkIsConflict(error)) {
+        toast.error(t("youAlreadyBelongToThisGame"), {
           position: "top-center",
         });
       } else {

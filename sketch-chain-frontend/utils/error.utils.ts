@@ -11,3 +11,7 @@ export const checkIsBackendError = (error: unknown): error is BackendError =>
 export const checkIsNotFound = (error: unknown): error is BackendError =>
   checkIsBackendError(error) &&
   error.response.statusCode === HttpStatusCode.NotFound;
+
+export const checkIsConflict = (error: unknown): error is BackendError =>
+  checkIsBackendError(error) &&
+  error.response.statusCode === HttpStatusCode.Conflict;
