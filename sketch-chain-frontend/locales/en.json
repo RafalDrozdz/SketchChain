@@ -10,5 +10,6 @@
   "join": "Join",
   "roomJoiningFailed": "Joining the room failed, try again!",
   "joinGame": "Join the game",
-  "gameNotFound": "Game not found"
+  "gameNotFound": "Game not found",
+  "youAlreadyBelongToThisGame": "You already belong to this game"
 }
