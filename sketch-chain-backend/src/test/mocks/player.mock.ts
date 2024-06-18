@@ -7,6 +7,9 @@ export const playerAvatarId = 5;
 export const secondPlayerIdMock = 'ec88af1f-ec0e-4f7a-b70e-ee49fcad9b88';
 export const secondPlayerAvatarId = 8;
 
+export const thirdPlayerIdMock = 'ee5a5258-2b2f-4372-af68-3e40832a9f68';
+export const thirdPlayerAvatarId = 21;
+
 export const playerMock: Player = {
   id: playerIdMock,
   avatarId: playerAvatarId,
@@ -23,8 +26,28 @@ export const secondPlayerMock: Player = {
   updatedDate: new Date(),
 };
 
+export const thirdPlayerMock: Player = {
+  id: thirdPlayerIdMock,
+  avatarId: thirdPlayerAvatarId,
+  nick: 'Second Player',
+  createdDate: new Date(),
+  updatedDate: new Date(),
+};
+
 export const modifyPlayerDtoMock: ModifyPlayerDto = {
   nick: 'Random Name',
   avatarId: playerAvatarId,
   playerId: playerIdMock,
+};
+
+export const secondModifyPlayerDtoMock: ModifyPlayerDto = {
+  nick: 'Random Name',
+  avatarId: secondPlayerAvatarId,
+  playerId: secondPlayerIdMock,
+};
+
+export const thirdModifyPlayerDtoMock: ModifyPlayerDto = {
+  nick: 'updated Name',
+  avatarId: thirdPlayerAvatarId,
+  playerId: thirdPlayerIdMock,
 };

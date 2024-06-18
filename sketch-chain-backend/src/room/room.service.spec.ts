@@ -10,16 +10,23 @@ import {
   modifyPlayerDtoMock,
   playerIdMock,
   playerMock,
+  secondModifyPlayerDtoMock,
   secondPlayerIdMock,
   secondPlayerMock,
+  thirdPlayerMock,
 } from 'src/test/mocks/player.mock';
 import {
   joinRoomDtoMock,
   roomIdMock,
   roomInProgressMock,
   roomMock,
+  secondJoinRoomDtoMock,
 } from 'src/test/mocks/room.mock';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { cloneDeep } from 'lodash';
 
 describe('RoomService', () => {
@@ -55,54 +62,72 @@ describe('RoomService', () => {
 
   describe('create', () => {
     it('should create a room with new user', async () => {
-      roomRepository.save.mockResolvedValue(roomMock);
+      const clonedRoomMock = cloneDeep(roomMock);
 
-      const room = await service.create(modifyPlayerDtoMock);
+      roomRepository.save.mockResolvedValue(clonedRoomMock);
+
+      const room = await service.create(cloneDeep(modifyPlayerDtoMock));
       expect(roomRepository.save).toBeCalled();
-      expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
-      expect(room).toEqual(roomMock);
+      expect(playerRepository.create).toBeCalledWith(
+        cloneDeep(modifyPlayerDtoMock),
+      );
+      expect(room).toEqual(clonedRoomMock);
     });
 
     it('should create a room with updated user', async () => {
-      roomRepository.save.mockResolvedValue(roomMock);
+      const clonedRoomMock = cloneDeep(roomMock);
 
-      const room = await service.create(modifyPlayerDtoMock);
+      roomRepository.save.mockResolvedValue(clonedRoomMock);
+
+      const room = await service.create(cloneDeep(modifyPlayerDtoMock));
       expect(roomRepository.save).toBeCalled();
-      expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
-      expect(room).toEqual(roomMock);
+      expect(playerRepository.create).toBeCalledWith(
+        cloneDeep(modifyPlayerDtoMock),
+      );
+      expect(room).toEqual(clonedRoomMock);
     });
   });
 
   describe('join', () => {
-    it('should join a room with new user', async () => {
-      roomRepository.findOne.mockResolvedValue(roomMock);
-      roomRepository.save.mockResolvedValue(roomMock);
-      playerRepository.save.mockResolvedValue(playerMock);
+    it('should join a room', async () => {
+      const clonedRoomMock = cloneDeep(roomMock);
+      roomRepository.findOne.mockResolvedValue(clonedRoomMock);
+      roomRepository.save.mockResolvedValue(clonedRoomMock);
+      playerRepository.save.mockResolvedValue(cloneDeep(thirdPlayerMock));
 
-      const room = await service.join(joinRoomDtoMock);
+      const room = await service.join(cloneDeep(secondJoinRoomDtoMock));
       expect(roomRepository.save).toBeCalled();
-      expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
-      expect(room).toEqual(roomMock);
-    });
-
-    it('should join a room with updated user', async () => {
-      roomRepository.findOne.mockResolvedValue(roomMock);
-      roomRepository.save.mockResolvedValue(roomMock);
-      playerRepository.save.mockResolvedValue(playerMock);
-
-      const room = await service.join(joinRoomDtoMock);
-      expect(roomRepository.save).toBeCalled();
-      expect(playerRepository.create).toBeCalledWith(modifyPlayerDtoMock);
-      expect(room).toEqual(roomMock);
+      expect(playerRepository.create).toBeCalledWith(
+        cloneDeep(secondModifyPlayerDtoMock),
+      );
+      expect(room).toEqual(clonedRoomMock);
     });
 
     it('should throw NotFoundException', async () => {
       try {
-        await service.join(joinRoomDtoMock);
+        await service.join(cloneDeep(joinRoomDtoMock));
         expect(false).toBeTruthy();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toEqual(`Room #${roomIdMock} not found`);
+      }
+    });
+
+    it('should throw ConflictException', async () => {
+      try {
+        const clonedRoomMock = cloneDeep(roomMock);
+
+        roomRepository.findOne.mockResolvedValue(clonedRoomMock);
+        roomRepository.save.mockResolvedValue(clonedRoomMock);
+        playerRepository.save.mockResolvedValue(playerMock);
+
+        await service.join(joinRoomDtoMock);
+        expect(false).toBeTruthy();
+      } catch (error) {
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(error.message).toEqual(
+          `Player #${playerIdMock} already in room #${roomIdMock}`,
+        );
       }
     });
   });
@@ -114,23 +139,24 @@ describe('RoomService', () => {
     };
 
     it('should start a game', async () => {
-      roomRepository.preload.mockResolvedValue(roomInProgressMock);
-      roomRepository.save.mockResolvedValue(roomInProgressMock);
+      const clonedRoomInProgressMock = cloneDeep(roomInProgressMock);
+      roomRepository.preload.mockResolvedValue(clonedRoomInProgressMock);
+      roomRepository.save.mockResolvedValue(clonedRoomInProgressMock);
 
-      const room = await service.startGame(startGameDtoMock);
+      const room = await service.startGame(cloneDeep(startGameDtoMock));
       expect(roomRepository.save).toBeCalled();
-      expect(roomRepository.save).toBeCalledWith(roomInProgressMock);
-      expect(room).toEqual(roomInProgressMock);
+      expect(roomRepository.save).toBeCalledWith(clonedRoomInProgressMock);
+      expect(room).toEqual(clonedRoomInProgressMock);
     });
 
     it('should throw ForbiddenException', async () => {
       const unauthorisedPlayerId = '526946aa-7271-4490-b39b-3739ea5602a6';
-      roomRepository.preload.mockResolvedValue(roomInProgressMock);
-      roomRepository.save.mockResolvedValue(roomInProgressMock);
+      roomRepository.preload.mockResolvedValue(cloneDeep(roomInProgressMock));
+      roomRepository.save.mockResolvedValue(cloneDeep(roomInProgressMock));
 
       try {
         await service.startGame({
-          ...startGameDtoMock,
+          ...cloneDeep(startGameDtoMock),
           playerId: unauthorisedPlayerId,
         });
         expect(false).toBeTruthy();
@@ -144,7 +170,7 @@ describe('RoomService', () => {
 
     it('should throw NotFoundException', async () => {
       try {
-        await service.startGame(startGameDtoMock);
+        await service.startGame(cloneDeep(startGameDtoMock));
         expect(false).toBeTruthy();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
@@ -166,7 +192,7 @@ describe('RoomService', () => {
       };
 
       expect(roomRepository.save).toBeCalled();
-      expect(roomRepository.save).toBeCalledWith(expectedResult);
+      expect(roomRepository.save).toBeCalledWith(cloneDeep(expectedResult));
       expect(room).toEqual(expectedResult);
     });
 
