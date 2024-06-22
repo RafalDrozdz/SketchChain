@@ -15,7 +15,6 @@ interface Props {
 
 export default async function Room({ params: { id } }: Props) {
   const { fetch: fetchRoom } = useRoom();
-
   try {
     const room = await fetchRoom(id);
     return <RoomContainer {...room!} />;
