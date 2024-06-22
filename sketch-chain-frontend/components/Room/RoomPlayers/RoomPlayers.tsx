@@ -1,6 +1,8 @@
 "use client";
 
 import { RoomPlayer } from "@/components";
+import useRoomPlayers from "@/hooks/Room/useRoomPlayers";
+import useLeavePageConfirm from "@/hooks/useLeavePageConfirm";
 import { socket } from "@/socket";
 import { Player } from "@/types/room.type";
 import { useEffect, useState } from "react";
@@ -10,28 +12,8 @@ interface Props {
 }
 
 export default function RoomPlayers({ players }: Props) {
-  const [allPlayers, setAllPlayers] = useState<Player[]>(players);
-
-  useEffect(() => {
-    socket.on("joined_room", (player: Player) => {
-      setAllPlayers((prev) => [...prev, player]);
-    });
-
-    socket.on("host", (playerId: string) => {
-      setAllPlayers((prev) =>
-        prev.map((player) => ({ ...player, host: player.id === playerId }))
-      );
-    });
-
-    socket.on("left_room", (playerId: string) => {
-      setAllPlayers((prev) => prev.filter((player) => player.id !== playerId));
-    });
-
-    return () => {
-      socket.removeListener("joined_room");
-      socket.removeListener("left_room");
-    };
-  }, []);
+  useLeavePageConfirm();
+  const { allPlayers } = useRoomPlayers(players);
 
   const playersComponents = allPlayers.map((player) => (
     <RoomPlayer
