@@ -92,7 +92,7 @@ export class EventsGateway {
   }
 
   async handleDisconnectFromRoom(socketId: string): Promise<void> {
-    const { playerId, roomId } = await this.connectionService.findOne(socketId);
+    const { playerId, roomId } = await this.connectionService.remove(socketId);
     const room = await this.roomService.leave(roomId, playerId);
     const websocketRoom = this.server.to(roomId);
     websocketRoom.emit('left_room', playerId);

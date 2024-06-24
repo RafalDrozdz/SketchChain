@@ -10,6 +10,7 @@ import {
   socketIdMock,
 } from 'src/test/mocks/connection.mock';
 import { NotFoundException } from '@nestjs/common';
+import { cloneDeep } from 'lodash';
 
 describe('ConnectionService', () => {
   let service: ConnectionService;
@@ -68,6 +69,29 @@ describe('ConnectionService', () => {
       expect(connectionRepository.save).toBeCalled();
       expect(connectionRepository.create).toBeCalledWith(connectionMock);
       expect(connection).toEqual(connectionMock);
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove connection', async () => {
+      const clonedConnectionMock = cloneDeep(connectionMock);
+      connectionRepository.findOne.mockResolvedValue(clonedConnectionMock);
+      connectionRepository.save.mockResolvedValue(clonedConnectionMock);
+
+      await service.remove(socketIdMock);
+
+      expect(connectionRepository.remove).toBeCalled();
+      connectionRepository.save.mockResolvedValue(clonedConnectionMock);
+    });
+
+    it('should throw NotFoundException', async () => {
+      try {
+        await service.findOne(socketIdMock);
+        expect(false).toBeTruthy();
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toEqual(`Connection #${socketIdMock} not found`);
+      }
     });
   });
 });
