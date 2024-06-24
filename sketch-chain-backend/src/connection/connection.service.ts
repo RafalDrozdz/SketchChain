@@ -22,9 +22,14 @@ export class ConnectionService {
   }
 
   async create(createConnectionDto: CreateConnectionDto): Promise<Connection> {
-    const createdPlayer = await this.connectionRepository.create(
+    const createdConnection = await this.connectionRepository.create(
       createConnectionDto,
     );
-    return this.connectionRepository.save(createdPlayer);
+    return this.connectionRepository.save(createdConnection);
+  }
+
+  async remove(socketId: string): Promise<Connection> {
+    const connection = await this.findOne(socketId);
+    return this.connectionRepository.remove(connection);
   }
 }
