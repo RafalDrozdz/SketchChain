@@ -3,9 +3,7 @@
 import { RoomPlayer } from "@/components";
 import useRoomPlayers from "@/hooks/Room/useRoomPlayers";
 import useLeavePageConfirm from "@/hooks/useLeavePageConfirm";
-import { socket } from "@/socket";
 import { Player } from "@/types/room.type";
-import { useEffect, useState } from "react";
 
 interface Props {
   players: Player[];
