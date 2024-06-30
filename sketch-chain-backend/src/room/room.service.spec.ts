@@ -140,7 +140,7 @@ describe('RoomService', () => {
 
     it('should start a game', async () => {
       const clonedRoomInProgressMock = cloneDeep(roomInProgressMock);
-      roomRepository.preload.mockResolvedValue(clonedRoomInProgressMock);
+      roomRepository.findOne.mockResolvedValue(clonedRoomInProgressMock);
       roomRepository.save.mockResolvedValue(clonedRoomInProgressMock);
 
       const room = await service.startGame(cloneDeep(startGameDtoMock));
@@ -151,7 +151,7 @@ describe('RoomService', () => {
 
     it('should throw ForbiddenException', async () => {
       const unauthorisedPlayerId = '526946aa-7271-4490-b39b-3739ea5602a6';
-      roomRepository.preload.mockResolvedValue(cloneDeep(roomInProgressMock));
+      roomRepository.findOne.mockResolvedValue(cloneDeep(roomInProgressMock));
       roomRepository.save.mockResolvedValue(cloneDeep(roomInProgressMock));
 
       try {
