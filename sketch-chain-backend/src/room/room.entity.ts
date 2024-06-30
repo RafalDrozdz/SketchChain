@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export type RoomStatus = 'waiting' | 'in-progress' | 'completed';
+export type RoomStatus = 'WAITING_FOR_START' | 'IN_PROGRESS' | 'COMPLETED';
 
 @Entity('rooms')
 export class Room {
@@ -20,8 +20,8 @@ export class Room {
   id: string;
 
   @Column({
-    enum: ['waiting', 'in-progress', 'completed'],
-    default: 'waiting',
+    enum: ['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'],
+    default: 'WAITING_FOR_START',
   })
   status: RoomStatus;
 

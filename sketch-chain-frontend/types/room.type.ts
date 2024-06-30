@@ -1,3 +1,5 @@
+export type RoomStatus = "WAITING_FOR_START" | "IN_PROGRESS" | "COMPLETED";
+
 export interface Player {
   id: string;
   nick: string;
@@ -7,6 +9,8 @@ export interface Player {
 
 export interface Room {
   id: string;
+  host: Player;
+  status: RoomStatus;
   players: Player[];
 }
 

@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { Player } from "@/types/room.type";
 import { socket } from "@/socket";
-export default function useRoomPlayers(players: Player[] = []) {
-  const [allPlayers, setAllPlayers] = useState<Player[]>(players);
+export default function useRoomPlayers(initialValue: Player[] = []) {
+  const [players, setPlayers] = useState<Player[]>(initialValue);
 
   useEffect(() => {
     socket.on("joined_room", (player: Player) => {
-      setAllPlayers((prev) => [...prev, player]);
+      setPlayers((prev) => [...prev, player]);
     });
 
     socket.on("host", (playerId: string) => {
-      setAllPlayers((prev) =>
+      setPlayers((prev) =>
         prev.map((player) => ({ ...player, host: player.id === playerId }))
       );
     });
 
     socket.on("left_room", (playerId: string) => {
-      setAllPlayers((prev) => prev.filter((player) => player.id !== playerId));
+      setPlayers((prev) => prev.filter((player) => player.id !== playerId));
     });
 
     return () => {
@@ -25,5 +25,5 @@ export default function useRoomPlayers(players: Player[] = []) {
     };
   }, []);
 
-  return { allPlayers };
+  return { players };
 }
