@@ -5,14 +5,13 @@ import {
   playerMock,
   secondModifyPlayerDtoMock,
   secondPlayerMock,
-  thirdModifyPlayerDtoMock,
 } from 'src/test/mocks/player.mock';
 
 export const roomIdMock = '04abb85f-b7ce-4df5-b273-7e9491f18267';
 
 export const roomMock: Room = {
   id: roomIdMock,
-  status: 'waiting',
+  status: 'WAITING_FOR_START',
   players: [playerMock, secondPlayerMock],
   host: playerMock,
   createdDate: new Date(),
@@ -21,7 +20,7 @@ export const roomMock: Room = {
 
 export const roomInProgressMock: Room = {
   id: roomIdMock,
-  status: 'in-progress',
+  status: 'IN_PROGRESS',
   players: [playerMock],
   host: playerMock,
   createdDate: new Date(),

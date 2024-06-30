@@ -13,6 +13,7 @@ import { CreateRoomDto } from 'src/room/dto/create-room.dto';
 import { plainToInstance } from 'class-transformer';
 import { ResponseRoomDto } from 'src/room/dto/response-room.dto';
 import { ResponsePlayerDto } from 'src/player/dto/response-player.dto';
+import { Room } from 'src/room/room.entity';
 
 @WebSocketGateway({ namespace: 'events', cors: true })
 export class EventsGateway {
@@ -84,11 +85,16 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('start_game')
-  async startGame(_client: Socket, payload: StartGameDto): Promise<void> {
+  async startGame(_client: Socket, payload: StartGameDto): Promise<Room> {
     const { roomId } = payload;
-    const websocketRoom = this.server.to(roomId);
-    await this.roomService.startGame(payload);
-    websocketRoom.emit('game_started');
+    try {
+      const websocketRoom = this.server.to(roomId);
+      const room = await this.roomService.startGame(payload);
+      websocketRoom.emit('game_started');
+      return room;
+    } catch (error) {
+      return error;
+    }
   }
 
   async handleDisconnectFromRoom(socketId: string): Promise<void> {

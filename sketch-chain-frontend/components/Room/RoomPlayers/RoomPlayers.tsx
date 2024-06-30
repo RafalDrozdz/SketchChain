@@ -1,8 +1,6 @@
 "use client";
 
 import { RoomPlayer } from "@/components";
-import useRoomPlayers from "@/hooks/Room/useRoomPlayers";
-import useLeavePageConfirm from "@/hooks/useLeavePageConfirm";
 import { Player } from "@/types/room.type";
 
 interface Props {
@@ -10,10 +8,7 @@ interface Props {
 }
 
 export default function RoomPlayers({ players }: Props) {
-  useLeavePageConfirm();
-  const { allPlayers } = useRoomPlayers(players);
-
-  const playersComponents = allPlayers.map((player) => (
+  const playersComponents = players.map((player) => (
     <RoomPlayer
       {...player}
       key={player.id}

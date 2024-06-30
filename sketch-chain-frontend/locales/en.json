@@ -12,5 +12,6 @@
   "joinGame": "Join the game",
   "gameNotFound": "Game not found",
   "youAlreadyBelongToThisGame": "You already belong to this game",
-  "areYouSureYouWantToLeaveThisPage": "Are you sure you want to leave this page?"
+  "areYouSureYouWantToLeaveThisPage": "Are you sure you want to leave this page?",
+  "waitingForTheHostToStartGame": "Waiting for the host to start the game"
 }

@@ -79,10 +79,9 @@ export class RoomService {
 
   async startGame(startGameDto: StartGameDto): Promise<Room> {
     const { playerId, roomId } = startGameDto;
-    const room = await this.roomRepository.preload({
-      id: roomId,
-      status: 'in-progress',
-    });
+    const room = await this.findOne(roomId);
+
+    room.status = 'IN_PROGRESS';
 
     if (!room) {
       throw new NotFoundException(`Room #${roomId} not found`);
