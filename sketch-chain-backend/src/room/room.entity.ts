@@ -34,7 +34,7 @@ export class Room {
   @JoinTable()
   players?: Player[];
 
-  @OneToMany(() => Step, (step) => step.room)
+  @OneToMany(() => Step, (step) => step.room, { onDelete: 'CASCADE' })
   steps?: Step[];
 
   @CreateDateColumn()

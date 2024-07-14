@@ -12,7 +12,7 @@ export default function RoomFooter({ id, host }: Props) {
   return (
     <div className="flex gap-6 w-full flex-grow items-end py-4">
       <RoomInviteBtn id={id} />
-      <RoomStartGameBtn id={id} />
+      <RoomStartGameBtn />
     </div>
   );
 }

@@ -6,11 +6,7 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 
-interface Props {
-  id: string;
-}
-
-export default function RoomStartGameBtn({ id }: Props) {
+export default function RoomStartGameBtn() {
   const t = useTranslations();
   const { startGame, isLoading } = useStartGame();
 
@@ -27,7 +23,7 @@ export default function RoomStartGameBtn({ id }: Props) {
     <BaseButton
       id="create-game-btn"
       className="w-full"
-      onClick={() => startGame(id)}>
+      onClick={startGame}>
       <span className="flex items-center justify-center gap-2">
         {loader}
         {t("start")}

@@ -12,8 +12,10 @@ export class Guess {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  guess: string;
+  @Column({
+    nullable: true,
+  })
+  guess?: string;
 
   @JoinTable()
   @ManyToOne(() => Player, (player) => player.guesses)

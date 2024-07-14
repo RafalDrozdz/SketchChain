@@ -8,4 +8,5 @@ export interface ServerToClientEvents {
   game_started: () => void;
   left_room: (playerId: string) => void;
   host: (playerId: string) => void;
+  step: (payload: any) => void;
 }

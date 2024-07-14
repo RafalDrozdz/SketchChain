@@ -6,7 +6,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ServerToClientEvents } from './types/event.types';
 import { RoomService } from 'src/room/room.service';
-import { StartGameDto } from '../room/dto/start-game.dto';
 import { JoinRoomDto } from 'src/room/dto/join-room.dto';
 import { ConnectionService } from 'src/connection/connection.service';
 import { CreateRoomDto } from 'src/room/dto/create-room.dto';
@@ -14,6 +13,7 @@ import { plainToInstance } from 'class-transformer';
 import { ResponseRoomDto } from 'src/room/dto/response-room.dto';
 import { ResponsePlayerDto } from 'src/player/dto/response-player.dto';
 import { Room } from 'src/room/room.entity';
+import { StepService } from 'src/step/step.service';
 
 @WebSocketGateway({ namespace: 'events', cors: true })
 export class EventsGateway {
@@ -23,6 +23,7 @@ export class EventsGateway {
   constructor(
     private readonly roomService: RoomService,
     private readonly connectionService: ConnectionService,
+    private readonly stepService: StepService,
   ) {}
 
   @SubscribeMessage('create_room')
@@ -39,6 +40,7 @@ export class EventsGateway {
     });
 
     client.join(room.id);
+    client.join(client.id);
 
     const websocketRoom = this.server.to(room.id);
     const responseRoomDto = plainToInstance(ResponseRoomDto, room);
@@ -66,6 +68,7 @@ export class EventsGateway {
       });
 
       client.join(room.id);
+      client.join(client.id);
 
       const websocketRoom = this.server.to(roomId);
 
@@ -85,17 +88,56 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('start_game')
-  async startGame(_client: Socket, payload: StartGameDto): Promise<Room> {
-    const { roomId } = payload;
+  async startGame(client: Socket): Promise<Room> {
+    const { playerId, roomId } = await this.connectionService.findOne(
+      client.id,
+    );
     try {
       const websocketRoom = this.server.to(roomId);
-      const room = await this.roomService.startGame(payload);
+      const room = await this.roomService.startGame({ roomId, playerId });
+      const steps = await this.stepService.createAllStepsForRoom(room);
+      console.log(steps);
       websocketRoom.emit('game_started');
+
+      steps[0].forEach(({ step, guess, drawing }) => {
+        const websocketClient = this.server.to(guess.player.id);
+
+        websocketClient.emit('step', {
+          type: 'guess',
+          step,
+          drawing,
+        });
+      });
+
       return room;
     } catch (error) {
+      console.log(error);
+
       return error;
     }
   }
+
+  // @SubscribeMessage('send_guess')
+  // async sendGuess(client: Socket, { guess }: { guess: string }): Promise<void> {
+  //   try {
+  //     const { playerId, roomId } = await this.connectionService.findOne(
+  //       client.id,
+  //     );
+  //     const room = await this.roomService.getLastStep(roomId);
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
+
+  // @SubscribeMessage('send_drawing')
+  // async sendDrawing(
+  //   client: Socket,
+  //   { drawing }: { drawing: string },
+  // ): Promise<void> {
+  //   const { playerId, roomId } = await this.connectionService.findOne(
+  //     client.id,
+  //   );
+  // }
 
   async handleDisconnectFromRoom(socketId: string): Promise<void> {
     const { playerId, roomId } = await this.connectionService.remove(socketId);

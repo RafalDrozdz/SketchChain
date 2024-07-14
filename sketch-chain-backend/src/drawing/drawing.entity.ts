@@ -12,8 +12,10 @@ export class Drawing {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  drawing: string;
+  @Column({
+    nullable: true,
+  })
+  drawing?: string;
 
   @JoinTable()
   @ManyToOne(() => Player, (player) => player.drawings)

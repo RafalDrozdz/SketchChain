@@ -1,5 +1,6 @@
 import { Drawing } from 'src/drawing/drawing.entity';
 import { Guess } from 'src/guess/guess.entity';
+import { Player } from 'src/player/player.entity';
 import { Room } from 'src/room/room.entity';
 import {
   Column,
@@ -7,6 +8,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -16,7 +18,7 @@ export class Step {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: 0 })
   step: number;
 
   @JoinColumn()
@@ -28,7 +30,7 @@ export class Step {
   guess: Guess;
 
   @JoinTable()
-  @ManyToOne(() => Room, (room) => room.steps)
+  @ManyToOne(() => Room, (room) => room.steps, { onDelete: 'CASCADE' })
   room: Room;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })

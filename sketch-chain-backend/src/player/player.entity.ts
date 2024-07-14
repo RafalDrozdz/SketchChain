@@ -1,6 +1,7 @@
 import { Drawing } from 'src/drawing/drawing.entity';
 import { Guess } from 'src/guess/guess.entity';
 import { Room } from 'src/room/room.entity';
+import { Step } from 'src/step/step.entity';
 import {
   Column,
   CreateDateColumn,
